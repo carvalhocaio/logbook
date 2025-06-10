@@ -50,3 +50,11 @@ class EntryDeleteView(LockedView, SuccessMessageMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super().delete(request, *args, **kwargs)
+
+
+class EntryRecentListView(LockedView, ListView):
+    model = Entry
+    template_name = "entries/entry_list_recents.html"
+
+    def get_queryset(self):
+        return Entry.objects.all().order_by("-date_created")[:5]

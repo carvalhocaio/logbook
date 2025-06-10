@@ -10,6 +10,10 @@
 
 <body>
   <h1><a href="/">LogBook …</a></h1>
+  <nav>
+    <a href="{% url 'entry-list' %}">All Entries</a>
+    <a href="{% url 'entry-recents' %}">Recent Entries</a>
+  </nav>
 
   {% if messages %}
   <ul class="messages">
