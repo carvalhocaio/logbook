@@ -1,7 +1,7 @@
 line-length = 79
 indent-width = 4
 
-exclude = ["migrations"]
+exclude = ["migrations", "entries/seed_entries.py"]
 
 [lint]
 select = ["I", "F", "E", "W", "PL", "PT"]

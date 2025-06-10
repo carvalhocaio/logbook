@@ -1,5 +1,5 @@
 run:
-	uvicorn main:app --reload
+	python manage.py runserver
 
 lint:
 	ruff check . && ruff check . --diff
@@ -10,3 +10,5 @@ format:
 test:
 	PYTHONPATH=. pytest
 
+seed:
+	python manage.py shell < entries/seed_entries.py
