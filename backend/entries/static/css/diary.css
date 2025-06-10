@@ -95,6 +95,26 @@ input[type="submit"] {
 
 /* Day coloring */
 
+.Monday {
+  background-color: #e3f2fd;
+}
+
+.Tuesday {
+  background-color: #ffe0b2;
+}
+
+.Wednesday {
+  background-color: #e1bee7;
+}
+
+.Thursday {
+  background-color: #c8e6c9;
+}
+
+.Friday {
+  background-color: #fff9c4;
+}
+
 .Saturday,
 .Sunday {
   background-color: lightsalmon;
