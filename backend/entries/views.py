@@ -20,6 +20,7 @@ class LockedView(LoginRequiredMixin):
 class EntryListView(LockedView, ListView):
     model = Entry
     queryset = Entry.objects.all().order_by("-date_created")
+    paginate_by = 10
 
 
 class EntryDetailView(LockedView, DetailView):
