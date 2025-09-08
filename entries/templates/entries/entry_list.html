@@ -19,6 +19,125 @@
     </div>
   </div>
 
+  <!-- Filters Section -->
+  <div class="mb-8 rounded-lg border border-border bg-card p-4 sm:p-6">
+    <div class="mb-4">
+      <button onclick="toggleFilters()" class="flex items-center justify-between w-full sm:w-auto">
+        <h2 class="text-lg font-semibold text-foreground flex items-center">
+          <i data-lucide="filter" class="h-5 w-5 mr-2"></i>
+          Filters
+          {% if has_filters %}
+            <span class="ml-2 inline-flex items-center rounded-full bg-primary px-2.5 py-0.5 text-xs font-medium text-primary-foreground">
+              Active
+            </span>
+          {% endif %}
+        </h2>
+        <i data-lucide="chevron-down" class="h-4 w-4 text-muted-foreground sm:hidden transition-transform" id="filter-chevron"></i>
+      </button>
+    </div>
+    
+    <div id="filter-form" class="{% if not has_filters %}hidden sm:block{% endif %}">
+      <form method="get" class="space-y-4">
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <!-- Search Filter -->
+          <div class="space-y-2">
+            <label for="search" class="text-sm font-medium text-foreground">Search</label>
+            <div class="relative">
+              <i data-lucide="search" class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"></i>
+              <input
+                type="text"
+                id="search"
+                name="search"
+                value="{{ current_search }}"
+                placeholder="Search title or content..."
+                class="flex h-10 w-full rounded-md border border-input bg-background pl-10 pr-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+          </div>
+
+          <!-- Date Filter -->
+          <div class="space-y-2">
+            <label for="date" class="text-sm font-medium text-foreground">Specific Date</label>
+            <input
+              type="date"
+              id="date"
+              name="date"
+              value="{{ current_date }}"
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            />
+          </div>
+
+          <!-- Date Range Filter -->
+          <div class="space-y-2">
+            <label for="date_range" class="text-sm font-medium text-foreground">Date Range</label>
+            <select
+              id="date_range"
+              name="date_range"
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <option value="">All time</option>
+              <option value="today" {% if current_date_range == 'today' %}selected{% endif %}>Today</option>
+              <option value="week" {% if current_date_range == 'week' %}selected{% endif %}>Last 7 days</option>
+              <option value="month" {% if current_date_range == 'month' %}selected{% endif %}>Last 30 days</option>
+            </select>
+          </div>
+
+          <!-- Weekday Filter -->
+          <div class="space-y-2">
+            <label for="weekday" class="text-sm font-medium text-foreground">Day of Week</label>
+            <select
+              id="weekday"
+              name="weekday"
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <option value="">All days</option>
+              <option value="1" {% if current_weekday == '1' %}selected{% endif %}>Sunday</option>
+              <option value="2" {% if current_weekday == '2' %}selected{% endif %}>Monday</option>
+              <option value="3" {% if current_weekday == '3' %}selected{% endif %}>Tuesday</option>
+              <option value="4" {% if current_weekday == '4' %}selected{% endif %}>Wednesday</option>
+              <option value="5" {% if current_weekday == '5' %}selected{% endif %}>Thursday</option>
+              <option value="6" {% if current_weekday == '6' %}selected{% endif %}>Friday</option>
+              <option value="7" {% if current_weekday == '7' %}selected{% endif %}>Saturday</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Filter Actions -->
+        <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border">
+          <button
+            type="submit"
+            class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full sm:w-auto"
+          >
+            <i data-lucide="filter" class="mr-2 h-4 w-4"></i>
+            Apply Filters
+          </button>
+          
+          {% if has_filters %}
+            <a
+              href="{% url 'entry-list' %}"
+              class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full sm:w-auto"
+            >
+              <i data-lucide="x" class="mr-2 h-4 w-4"></i>
+              Clear Filters
+            </a>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Results Summary -->
+  {% if has_filters %}
+    <div class="mb-6 flex items-center justify-between text-sm text-muted-foreground">
+      <div>
+        Showing {{ filtered_count }} of {{ total_entries }} entries
+        {% if current_search %}
+          matching "{{ current_search }}"
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
   {% if entry_list %}
     <!-- Entries Grid -->
     <div class="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -67,15 +186,29 @@
     <!-- Empty State -->
     <div class="text-center py-12">
       <div class="mx-auto h-12 w-12 text-muted-foreground mb-4">
-        <i data-lucide="book-open" class="h-12 w-12"></i>
+        {% if has_filters %}
+          <i data-lucide="search-x" class="h-12 w-12"></i>
+        {% else %}
+          <i data-lucide="book-open" class="h-12 w-12"></i>
+        {% endif %}
       </div>
-      <h3 class="text-lg font-medium text-foreground mb-2">No entries yet</h3>
-      <p class="text-muted-foreground mb-6">Get started by creating your first LogBook entry.</p>
-      <a href="{% url 'entry-create' %}" 
-         class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-        <i data-lucide="plus" class="mr-2 h-4 w-4"></i>
-        Create your first entry
-      </a>
+      {% if has_filters %}
+        <h3 class="text-lg font-medium text-foreground mb-2">No entries found</h3>
+        <p class="text-muted-foreground mb-6">Try adjusting your filters to find what you're looking for.</p>
+        <a href="{% url 'entry-list' %}" 
+           class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+          <i data-lucide="x" class="mr-2 h-4 w-4"></i>
+          Clear all filters
+        </a>
+      {% else %}
+        <h3 class="text-lg font-medium text-foreground mb-2">No entries yet</h3>
+        <p class="text-muted-foreground mb-6">Get started by creating your first LogBook entry.</p>
+        <a href="{% url 'entry-create' %}" 
+           class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+          <i data-lucide="plus" class="mr-2 h-4 w-4"></i>
+          Create your first entry
+        </a>
+      {% endif %}
     </div>
   {% endif %}
 </div>
@@ -88,4 +221,41 @@
     overflow: hidden;
   }
 </style>
+
+<script>
+  function toggleFilters() {
+    const filterForm = document.getElementById('filter-form');
+    const chevron = document.getElementById('filter-chevron');
+    
+    filterForm.classList.toggle('hidden');
+    
+    if (filterForm.classList.contains('hidden')) {
+      chevron.style.transform = 'rotate(0deg)';
+    } else {
+      chevron.style.transform = 'rotate(180deg)';
+    }
+  }
+
+  // Auto-submit form when date range or weekday changes (better UX)
+  document.addEventListener('DOMContentLoaded', function() {
+    const dateRangeSelect = document.getElementById('date_range');
+    const weekdaySelect = document.getElementById('weekday');
+    
+    if (dateRangeSelect) {
+      dateRangeSelect.addEventListener('change', function() {
+        // Clear specific date when selecting a range
+        if (this.value) {
+          document.getElementById('date').value = '';
+        }
+      });
+    }
+    
+    if (weekdaySelect) {
+      weekdaySelect.addEventListener('change', function() {
+        // Auto-submit could be added here if desired
+        // this.form.submit();
+      });
+    }
+  });
+</script>
 {% endblock content %}
