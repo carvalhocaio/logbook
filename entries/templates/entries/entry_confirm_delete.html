@@ -21,13 +21,13 @@
   <div class="max-w-2xl mx-auto">
     <div class="rounded-lg border border-destructive/20 bg-card text-card-foreground shadow-sm">
       <!-- Header -->
-      <header class="border-b border-destructive/20 px-6 py-4 bg-destructive/5">
+      <header class="border-b border-destructive/20 px-4 sm:px-6 py-4 bg-destructive/5">
         <div class="flex items-center space-x-3">
-          <div class="rounded-full p-2 bg-destructive/10">
+          <div class="rounded-full p-2 bg-destructive/10 flex-shrink-0">
             <i data-lucide="alert-triangle" class="h-5 w-5 text-destructive"></i>
           </div>
           <div>
-            <h1 class="text-xl font-bold text-foreground">Delete Entry</h1>
+            <h1 class="text-lg sm:text-xl font-bold text-foreground">Delete Entry</h1>
             <p class="text-sm text-muted-foreground mt-1">
               This action cannot be undone
             </p>
@@ -36,7 +36,7 @@
       </header>
 
       <!-- Content -->
-      <div class="px-6 py-6">
+      <div class="px-4 sm:px-6 py-6">
         <div class="mb-6">
           <p class="text-foreground mb-4">
             Are you sure you want to permanently delete this entry?
@@ -71,17 +71,17 @@
       </div>
 
       <!-- Actions -->
-      <footer class="border-t border-border px-6 py-4 bg-muted/30">
-        <form method="post" class="flex items-center justify-between">
+      <footer class="border-t border-border px-4 sm:px-6 py-4 bg-muted/30">
+        <form method="post" class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3">
           {% csrf_token %}
           <a href="{% url 'entry-detail' entry.id %}" 
-             class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+             class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full sm:w-auto">
             <i data-lucide="arrow-left" class="mr-2 h-4 w-4"></i>
             Cancel
           </a>
           
           <button type="submit" 
-                  class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-destructive text-destructive-foreground hover:bg-destructive/90 h-10 px-4 py-2">
+                  class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-destructive text-destructive-foreground hover:bg-destructive/90 h-10 px-4 py-2 w-full sm:w-auto">
             <i data-lucide="trash-2" class="mr-2 h-4 w-4"></i>
             Delete Entry
           </button>

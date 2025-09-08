@@ -5,26 +5,29 @@
 {% block content %}
 <div class="px-4 sm:px-0">
   <!-- Header -->
-  <div class="flex justify-between items-center mb-8">
-    <div>
-      <h1 class="text-3xl font-bold tracking-tight text-foreground">Your LogBook</h1>
-      <p class="mt-2 text-muted-foreground">Keep track of your thoughts, ideas, and experiences</p>
-    </div>
-    <div class="text-sm text-muted-foreground">
-      <i data-lucide="clock" class="inline h-4 w-4 mr-1"></i>
-      {% now "F j, Y \a\t g:i A" %}
+  <div class="mb-8">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">Your LogBook</h1>
+        <p class="mt-2 text-muted-foreground">Keep track of your thoughts, ideas, and experiences</p>
+      </div>
+      <div class="text-sm text-muted-foreground">
+        <i data-lucide="clock" class="inline h-4 w-4 mr-1"></i>
+        <span class="hidden sm:inline">{% now "F j, Y \a\t g:i A" %}</span>
+        <span class="sm:hidden">{% now "M j, Y" %}</span>
+      </div>
     </div>
   </div>
 
   {% if entry_list %}
     <!-- Entries Grid -->
-    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div class="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {% for entry in entry_list %}
         <div class="group rounded-lg border border-border bg-card text-card-foreground shadow-sm hover:shadow-md transition-shadow">
-          <div class="p-6">
-            <div class="flex items-center justify-between mb-3">
+          <div class="p-4 sm:p-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-3">
               <div class="flex items-center space-x-2">
-                <i data-lucide="calendar" class="h-4 w-4 text-muted-foreground"></i>
+                <i data-lucide="calendar" class="h-4 w-4 text-muted-foreground flex-shrink-0"></i>
                 <time class="text-sm text-muted-foreground">
                   {{ entry.date_created|date:"M j, Y" }}
                 </time>
