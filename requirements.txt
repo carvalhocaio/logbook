@@ -2,3 +2,4 @@ Django==5.1
 python-decouple==3.8
 dj-database-url==3.0.1
 unipath==1.1
+faker==37.6.0
