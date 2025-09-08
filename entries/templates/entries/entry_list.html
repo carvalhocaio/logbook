@@ -32,11 +32,11 @@
             </span>
           {% endif %}
         </h2>
-        <i data-lucide="chevron-down" class="h-4 w-4 text-muted-foreground sm:hidden transition-transform" id="filter-chevron"></i>
+        <i data-lucide="chevron-down" class="h-4 w-4 text-muted-foreground transition-transform" id="filter-chevron"></i>
       </button>
     </div>
     
-    <div id="filter-form" class="{% if not has_filters %}hidden sm:block{% endif %}">
+    <div id="filter-form" class="{% if not has_filters %}hidden{% endif %}">
       <form method="get" class="space-y-4">
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <!-- Search Filter -->
