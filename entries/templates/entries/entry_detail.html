@@ -1,13 +1,93 @@
 {% extends "entries/base.html" %}
 
+{% block title %}{{ entry.title }} - LogBook{% endblock %}
+
 {% block content %}
-<article>
-  <h2>{{ entry.date_created|date:'Y-m-d H:i' }}</h2>
-  <h3>{{ entry.title }}</h3>
-  <p>{{ entry.content }}</p>
-</article>
-<p>
-  <a href="{% url 'entry-update' entry.id %}">✍️ Edit</a>
-  <a href="{% url 'entry-delete' entry.id %}">⛔ Delete</a>
-</p>
+<div class="px-4 sm:px-0">
+  <!-- Breadcrumb -->
+  <nav class="flex items-center space-x-2 text-sm text-muted-foreground mb-6">
+    <a href="{% url 'entry-list' %}" class="hover:text-foreground transition-colors">
+      <i data-lucide="home" class="h-4 w-4"></i>
+    </a>
+    <i data-lucide="chevron-right" class="h-4 w-4"></i>
+    <a href="{% url 'entry-list' %}" class="hover:text-foreground transition-colors">All Entries</a>
+    <i data-lucide="chevron-right" class="h-4 w-4"></i>
+    <span class="text-foreground">{{ entry.title|truncatechars:30 }}</span>
+  </nav>
+
+  <!-- Entry Content -->
+  <article class="rounded-lg border border-border bg-card text-card-foreground shadow-sm">
+    <!-- Header -->
+    <header class="border-b border-border px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <i data-lucide="file-text" class="h-5 w-5 text-primary"></i>
+          <div>
+            <h1 class="text-2xl font-bold text-foreground">{{ entry.title }}</h1>
+            <div class="flex items-center space-x-4 mt-2">
+              <div class="flex items-center space-x-2 text-sm text-muted-foreground">
+                <i data-lucide="calendar" class="h-4 w-4"></i>
+                <time>{{ entry.date_created|date:"F j, Y" }}</time>
+              </div>
+              <div class="flex items-center space-x-2 text-sm text-muted-foreground">
+                <i data-lucide="clock" class="h-4 w-4"></i>
+                <time>{{ entry.date_created|date:"g:i A" }}</time>
+              </div>
+              <span class="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground">
+                {{ entry.date_created|date:"l" }}
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="flex items-center space-x-2">
+          <a href="{% url 'entry-update' entry.id %}" 
+             class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+            <i data-lucide="edit" class="mr-2 h-4 w-4"></i>
+            Edit
+          </a>
+          <a href="{% url 'entry-delete' entry.id %}" 
+             class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-destructive text-destructive-foreground hover:bg-destructive/90 h-10 px-4 py-2">
+            <i data-lucide="trash-2" class="mr-2 h-4 w-4"></i>
+            Delete
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div class="px-6 py-8">
+      <div class="prose prose-slate max-w-none">
+        <div class="text-foreground leading-7 whitespace-pre-line">{{ entry.content }}</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-border px-6 py-4 bg-muted/30">
+      <div class="flex items-center justify-between">
+        <div class="text-sm text-muted-foreground">
+          Entry created {{ entry.date_created|timesince }} ago
+        </div>
+        <a href="{% url 'entry-list' %}" 
+           class="inline-flex items-center text-sm font-medium text-primary hover:text-primary/80">
+          <i data-lucide="arrow-left" class="mr-1 h-3 w-3"></i>
+          Back to all entries
+        </a>
+      </div>
+    </footer>
+  </article>
+</div>
+
+<style>
+  .prose {
+    color: inherit;
+  }
+  .prose p {
+    margin-bottom: 1rem;
+  }
+  .prose p:last-child {
+    margin-bottom: 0;
+  }
+</style>
 {% endblock content %}

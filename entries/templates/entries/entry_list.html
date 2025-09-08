@@ -1,20 +1,88 @@
 {% extends "entries/base.html" %}
 
+{% block title %}LogBook - All Entries{% endblock %}
+
 {% block content %}
-<article>
-  <h2 class="mark">{% now "Y-m-d H:i" %}</em></h2>
-  <a href="{% url 'entry-create' %}"><button>Add new entry</button></a>
-</article>
-{% for entry in entry_list %}
-<article>
-  <h2 class="{{ entry.date_created|date:'l' }}">
-    {{ entry.date_created|date:'Y-m-d H:i' }}
-  </h2>
-  <h3>
-    <a href="{% url 'entry-detail' entry.id %}">
-      {{ entry.title }}
-    </a>
-  </h3>
-</article>
-{% endfor %}
+<div class="px-4 sm:px-0">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-3xl font-bold tracking-tight text-foreground">Your LogBook</h1>
+      <p class="mt-2 text-muted-foreground">Keep track of your thoughts, ideas, and experiences</p>
+    </div>
+    <div class="text-sm text-muted-foreground">
+      <i data-lucide="clock" class="inline h-4 w-4 mr-1"></i>
+      {% now "F j, Y \a\t g:i A" %}
+    </div>
+  </div>
+
+  {% if entry_list %}
+    <!-- Entries Grid -->
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {% for entry in entry_list %}
+        <div class="group rounded-lg border border-border bg-card text-card-foreground shadow-sm hover:shadow-md transition-shadow">
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center space-x-2">
+                <i data-lucide="calendar" class="h-4 w-4 text-muted-foreground"></i>
+                <time class="text-sm text-muted-foreground">
+                  {{ entry.date_created|date:"M j, Y" }}
+                </time>
+              </div>
+              <div class="flex items-center space-x-1">
+                <span class="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground">
+                  {{ entry.date_created|date:"l" }}
+                </span>
+              </div>
+            </div>
+            
+            <h3 class="text-lg font-semibold mb-3 group-hover:text-primary transition-colors">
+              <a href="{% url 'entry-detail' entry.id %}" class="block">
+                {{ entry.title }}
+              </a>
+            </h3>
+            
+            <p class="text-muted-foreground text-sm line-clamp-3 mb-4">
+              {{ entry.content|truncatewords:20 }}
+            </p>
+            
+            <div class="flex items-center justify-between">
+              <time class="text-xs text-muted-foreground">
+                {{ entry.date_created|date:"g:i A" }}
+              </time>
+              <a href="{% url 'entry-detail' entry.id %}" 
+                 class="inline-flex items-center text-sm font-medium text-primary hover:text-primary/80">
+                Read more
+                <i data-lucide="arrow-right" class="ml-1 h-3 w-3"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <!-- Empty State -->
+    <div class="text-center py-12">
+      <div class="mx-auto h-12 w-12 text-muted-foreground mb-4">
+        <i data-lucide="book-open" class="h-12 w-12"></i>
+      </div>
+      <h3 class="text-lg font-medium text-foreground mb-2">No entries yet</h3>
+      <p class="text-muted-foreground mb-6">Get started by creating your first LogBook entry.</p>
+      <a href="{% url 'entry-create' %}" 
+         class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+        <i data-lucide="plus" class="mr-2 h-4 w-4"></i>
+        Create your first entry
+      </a>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
 {% endblock content %}

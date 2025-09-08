@@ -1,18 +1,129 @@
 {% extends "entries/base.html" %}
 
+{% block title %}
+  {% if form.instance.pk %}Edit Entry{% else %}New Entry{% endif %} - LogBook
+{% endblock %}
+
 {% block content %}
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" value="Save">
-</form>
-{% if entry %}
-<a href="{% url 'entry-detail' entry.id %}">
-  <button>Cancel</button>
-</a>
-{% else %}
-<a href="{% url 'entry-list' %}">
-  <button>Cancel</button>
-</a>
-{% endif %}
+<div class="px-4 sm:px-0">
+  <!-- Breadcrumb -->
+  <nav class="flex items-center space-x-2 text-sm text-muted-foreground mb-6">
+    <a href="{% url 'entry-list' %}" class="hover:text-foreground transition-colors">
+      <i data-lucide="home" class="h-4 w-4"></i>
+    </a>
+    <i data-lucide="chevron-right" class="h-4 w-4"></i>
+    <a href="{% url 'entry-list' %}" class="hover:text-foreground transition-colors">All Entries</a>
+    <i data-lucide="chevron-right" class="h-4 w-4"></i>
+    <span class="text-foreground">
+      {% if form.instance.pk %}Edit Entry{% else %}New Entry{% endif %}
+    </span>
+  </nav>
+
+  <!-- Form Card -->
+  <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm">
+    <!-- Header -->
+    <header class="border-b border-border px-6 py-4">
+      <div class="flex items-center space-x-3">
+        <i data-lucide="{% if form.instance.pk %}edit{% else %}plus{% endif %}" class="h-5 w-5 text-primary"></i>
+        <div>
+          <h1 class="text-2xl font-bold text-foreground">
+            {% if form.instance.pk %}Edit Entry{% else %}Create New Entry{% endif %}
+          </h1>
+          <p class="text-sm text-muted-foreground mt-1">
+            {% if form.instance.pk %}
+              Make changes to your entry below
+            {% else %}
+              Share your thoughts, ideas, or experiences
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Form -->
+    <form method="post" class="px-6 py-8">
+      {% csrf_token %}
+      <div class="space-y-6">
+        <!-- Title Field -->
+        <div class="space-y-2">
+          <label for="{{ form.title.id_for_label }}" class="text-sm font-medium text-foreground">
+            {{ form.title.label }}
+          </label>
+          <input 
+            type="text" 
+            name="{{ form.title.name }}" 
+            id="{{ form.title.id_for_label }}"
+            value="{{ form.title.value|default:'' }}"
+            placeholder="Enter a descriptive title for your entry..."
+            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            {% if form.title.field.required %}required{% endif %}
+          />
+          {% if form.title.errors %}
+            <div class="text-sm text-destructive">
+              {% for error in form.title.errors %}
+                <p class="flex items-center mt-1">
+                  <i data-lucide="alert-circle" class="h-4 w-4 mr-1"></i>
+                  {{ error }}
+                </p>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Content Field -->
+        <div class="space-y-2">
+          <label for="{{ form.content.id_for_label }}" class="text-sm font-medium text-foreground">
+            {{ form.content.label }}
+          </label>
+          <textarea 
+            name="{{ form.content.name }}" 
+            id="{{ form.content.id_for_label }}"
+            rows="12"
+            placeholder="Write your entry content here..."
+            class="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-y"
+            {% if form.content.field.required %}required{% endif %}
+          >{{ form.content.value|default:'' }}</textarea>
+          {% if form.content.errors %}
+            <div class="text-sm text-destructive">
+              {% for error in form.content.errors %}
+                <p class="flex items-center mt-1">
+                  <i data-lucide="alert-circle" class="h-4 w-4 mr-1"></i>
+                  {{ error }}
+                </p>
+              {% endfor %}
+            </div>
+          {% endif %}
+          <p class="text-xs text-muted-foreground">
+            Express yourself freely. Your content will be preserved exactly as you write it.
+          </p>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="flex items-center justify-between pt-8 border-t border-border">
+        <div class="flex items-center space-x-2">
+          {% if form.instance.pk %}
+            <a href="{% url 'entry-detail' form.instance.pk %}" 
+               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+              <i data-lucide="arrow-left" class="mr-2 h-4 w-4"></i>
+              Cancel
+            </a>
+          {% else %}
+            <a href="{% url 'entry-list' %}" 
+               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+              <i data-lucide="arrow-left" class="mr-2 h-4 w-4"></i>
+              Cancel
+            </a>
+          {% endif %}
+        </div>
+        
+        <button type="submit" 
+                class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+          <i data-lucide="save" class="mr-2 h-4 w-4"></i>
+          {% if form.instance.pk %}Update Entry{% else %}Create Entry{% endif %}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock content %}
