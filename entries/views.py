@@ -39,7 +39,7 @@ class EntryUpdateView(LockedView, SuccessMessageMixin, UpdateView):
     success_message = "Your entry was updated!"
 
     def get_success_url(self):
-        return reverse_lazy("entry-detail", kwars={"pk": self.entry.id})
+        return reverse_lazy("entry-detail", kwargs={"pk": self.object.pk})
 
 
 class EntryDeleteView(LockedView, SuccessMessageMixin, DeleteView):
