@@ -22,7 +22,7 @@
   <!-- Filters Section -->
   <div class="mb-8 rounded-lg border border-border bg-card p-4 sm:p-6">
     <div class="mb-4">
-      <button onclick="toggleFilters()" class="flex items-center justify-between w-full sm:w-auto">
+      <button onclick="toggleFilters()" class="flex items-center justify-between w-full">
         <h2 class="text-lg font-semibold text-foreground flex items-center">
           <i data-lucide="filter" class="h-5 w-5 mr-2"></i>
           Filters
@@ -36,7 +36,7 @@
       </button>
     </div>
     
-    <div id="filter-form" class="{% if not has_filters %}hidden{% endif %}">
+    <div id="filter-form" class="{% if not has_filters and not request.GET.show_filters %}hidden{% endif %}">
       <form method="get" class="space-y-4">
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <!-- Search Filter -->
@@ -114,7 +114,7 @@
           
           {% if has_filters %}
             <a
-              href="{% url 'entry-list' %}"
+              href="{% url 'entry-list' %}?show_filters=1"
               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full sm:w-auto"
             >
               <i data-lucide="x" class="mr-2 h-4 w-4"></i>
@@ -195,7 +195,7 @@
       {% if has_filters %}
         <h3 class="text-lg font-medium text-foreground mb-2">No entries found</h3>
         <p class="text-muted-foreground mb-6">Try adjusting your filters to find what you're looking for.</p>
-        <a href="{% url 'entry-list' %}" 
+        <a href="{% url 'entry-list' %}?show_filters=1" 
            class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
           <i data-lucide="x" class="mr-2 h-4 w-4"></i>
           Clear all filters
@@ -217,6 +217,7 @@
   .line-clamp-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -236,10 +237,17 @@
     }
   }
 
-  // Auto-submit form when date range or weekday changes (better UX)
+  // Initialize filter state and interactions
   document.addEventListener('DOMContentLoaded', function() {
+    const filterForm = document.getElementById('filter-form');
+    const chevron = document.getElementById('filter-chevron');
     const dateRangeSelect = document.getElementById('date_range');
     const weekdaySelect = document.getElementById('weekday');
+    
+    // Set initial chevron state
+    if (!filterForm.classList.contains('hidden')) {
+      chevron.style.transform = 'rotate(180deg)';
+    }
     
     if (dateRangeSelect) {
       dateRangeSelect.addEventListener('change', function() {
