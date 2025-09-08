@@ -8,48 +8,90 @@
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           colors: {
-            border: "hsl(214.3 31.8% 91.4%)",
-            input: "hsl(214.3 31.8% 91.4%)",
-            ring: "hsl(221.2 83.2% 53.3%)",
-            background: "hsl(0 0% 100%)",
-            foreground: "hsl(222.2 84% 4.9%)",
+            border: "hsl(var(--border))",
+            input: "hsl(var(--input))",
+            ring: "hsl(var(--ring))",
+            background: "hsl(var(--background))",
+            foreground: "hsl(var(--foreground))",
             primary: {
-              DEFAULT: "hsl(221.2 83.2% 53.3%)",
-              foreground: "hsl(210 40% 98%)",
+              DEFAULT: "hsl(var(--primary))",
+              foreground: "hsl(var(--primary-foreground))",
             },
             secondary: {
-              DEFAULT: "hsl(210 40% 96%)",
-              foreground: "hsl(222.2 84% 4.9%)",
+              DEFAULT: "hsl(var(--secondary))",
+              foreground: "hsl(var(--secondary-foreground))",
             },
             destructive: {
-              DEFAULT: "hsl(0 84.2% 60.2%)",
-              foreground: "hsl(210 40% 98%)",
+              DEFAULT: "hsl(var(--destructive))",
+              foreground: "hsl(var(--destructive-foreground))",
             },
             muted: {
-              DEFAULT: "hsl(210 40% 96%)",
-              foreground: "hsl(215.4 16.3% 46.9%)",
+              DEFAULT: "hsl(var(--muted))",
+              foreground: "hsl(var(--muted-foreground))",
             },
             accent: {
-              DEFAULT: "hsl(210 40% 96%)",
-              foreground: "hsl(222.2 84% 4.9%)",
+              DEFAULT: "hsl(var(--accent))",
+              foreground: "hsl(var(--accent-foreground))",
             },
             card: {
-              DEFAULT: "hsl(0 0% 100%)",
-              foreground: "hsl(222.2 84% 4.9%)",
+              DEFAULT: "hsl(var(--card))",
+              foreground: "hsl(var(--card-foreground))",
             },
           },
         }
       }
     }
   </script>
+  <style>
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 222.2 84% 4.9%;
+      --card: 0 0% 100%;
+      --card-foreground: 222.2 84% 4.9%;
+      --primary: 221.2 83.2% 53.3%;
+      --primary-foreground: 210 40% 98%;
+      --secondary: 210 40% 96%;
+      --secondary-foreground: 222.2 84% 4.9%;
+      --muted: 210 40% 96%;
+      --muted-foreground: 215.4 16.3% 46.9%;
+      --accent: 210 40% 96%;
+      --accent-foreground: 222.2 84% 4.9%;
+      --destructive: 0 84.2% 60.2%;
+      --destructive-foreground: 210 40% 98%;
+      --border: 214.3 31.8% 91.4%;
+      --input: 214.3 31.8% 91.4%;
+      --ring: 221.2 83.2% 53.3%;
+    }
+    
+    .dark {
+      --background: 222.2 84% 4.9%;
+      --foreground: 210 40% 98%;
+      --card: 222.2 84% 4.9%;
+      --card-foreground: 210 40% 98%;
+      --primary: 217.2 91.2% 59.8%;
+      --primary-foreground: 222.2 84% 4.9%;
+      --secondary: 217.2 32.6% 17.5%;
+      --secondary-foreground: 210 40% 98%;
+      --muted: 217.2 32.6% 17.5%;
+      --muted-foreground: 215 20.2% 65.1%;
+      --accent: 217.2 32.6% 17.5%;
+      --accent-foreground: 210 40% 98%;
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 210 40% 98%;
+      --border: 217.2 32.6% 17.5%;
+      --input: 217.2 32.6% 17.5%;
+      --ring: 224.3 76.3% 94.1%;
+    }
+  </style>
 </head>
 <body class="h-full bg-background text-foreground">
   <div class="min-h-full">
     <!-- Navigation -->
-    <nav class="border-b border-border bg-white">
+    <nav class="border-b border-border bg-background">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 justify-between items-center">
           <!-- Logo -->
@@ -62,6 +104,12 @@
           
           <!-- Desktop Menu -->
           <div class="hidden sm:flex items-center space-x-3">
+            <!-- Dark Mode Toggle -->
+            <button onclick="toggleDarkMode()" 
+                    class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10">
+              <i data-lucide="sun" class="h-4 w-4 dark:hidden"></i>
+              <i data-lucide="moon" class="h-4 w-4 hidden dark:block"></i>
+            </button>
             <a href="{% url 'entry-create' %}" 
                class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
               <i data-lucide="plus" class="mr-2 h-4 w-4"></i>
@@ -90,6 +138,14 @@
         <!-- Mobile Menu (hidden by default) -->
         <div id="mobile-menu" class="hidden sm:hidden border-t border-border mt-2 pt-2 pb-2">
           <div class="flex flex-col space-y-2">
+            <!-- Dark Mode Toggle Mobile -->
+            <button onclick="toggleDarkMode()" 
+                    class="w-full inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+              <i data-lucide="sun" class="mr-2 h-4 w-4 dark:hidden"></i>
+              <i data-lucide="moon" class="mr-2 h-4 w-4 hidden dark:block"></i>
+              <span class="dark:hidden">Light Mode</span>
+              <span class="hidden dark:block">Dark Mode</span>
+            </button>
             <a href="{% url 'entry-create' %}" 
                class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
               <i data-lucide="plus" class="mr-2 h-4 w-4"></i>
@@ -134,11 +190,47 @@
   <script>
     lucide.createIcons();
     
+    // Dark mode functionality
+    function initDarkMode() {
+      // Check if user has a saved preference
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+    
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.contains('dark');
+      
+      if (isDark) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+      
+      // Re-initialize lucide icons after theme change
+      setTimeout(() => lucide.createIcons(), 100);
+    }
+    
     // Mobile menu toggle
     function toggleMobileMenu() {
       const menu = document.getElementById('mobile-menu');
       menu.classList.toggle('hidden');
     }
+    
+    // Initialize dark mode on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      initDarkMode();
+    });
+    
+    // Initialize immediately for faster loading
+    initDarkMode();
   </script>
 </body>
 </html>
