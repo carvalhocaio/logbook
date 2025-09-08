@@ -1,7 +1,7 @@
 line-length = 79
 indent-width = 4
 
-exclude = ["manage.py"]
+exclude = ["manage.py", "migrations"]
 
 [lint]
 select = ["I", "F", "E", "W", "PL", "PT"]
