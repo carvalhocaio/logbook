@@ -23,6 +23,11 @@
 
   {% block content %}{% endblock content %}
 
+  <hr>
+  <form method="post" action="{% url 'admin:logout' %}">
+    {% csrf_token %}
+    <input type="submit" value="Logout" />
+  </form>
 </body>
 
 </html>
