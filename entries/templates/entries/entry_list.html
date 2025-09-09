@@ -19,15 +19,15 @@
     </div>
   </div>
 
-  <!-- Sticky Action Bar -->
-  <div class="sticky top-4 z-40 mb-8">
+  <!-- Action Bar -->
+  <div class="mb-8">
     <div class="flex justify-between items-center">
       <div class="flex items-center gap-3">
         <!-- Filter Toggle Button -->
         <button onclick="toggleFilters()" 
                 class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
           <i data-lucide="filter" class="mr-2 h-4 w-4"></i>
-          <span class="hidden sm:inline">Filters</span>
+          <span>Filters</span>
           {% if has_filters %}
             <span class="ml-2 inline-flex items-center rounded-full bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground">
               {{ filtered_count }}
@@ -62,12 +62,11 @@
         {% endif %}
       </div>
       
-      <!-- New Entry Button -->
+      <!-- Desktop New Entry Button -->
       <a href="{% url 'entry-create' %}" 
-         class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-xl h-10 px-4 py-2">
+         class="hidden sm:inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
         <i data-lucide="plus" class="mr-2 h-4 w-4"></i>
-        <span class="hidden sm:inline">New Entry</span>
-        <span class="sm:hidden">New</span>
+        New Entry
       </a>
     </div>
   </div>
@@ -128,13 +127,13 @@
               class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <option value="">All days</option>
-              <option value="1" {% if current_weekday == '1' %}selected{% endif %}>Sunday</option>
-              <option value="2" {% if current_weekday == '2' %}selected{% endif %}>Monday</option>
-              <option value="3" {% if current_weekday == '3' %}selected{% endif %}>Tuesday</option>
-              <option value="4" {% if current_weekday == '4' %}selected{% endif %}>Wednesday</option>
-              <option value="5" {% if current_weekday == '5' %}selected{% endif %}>Thursday</option>
-              <option value="6" {% if current_weekday == '6' %}selected{% endif %}>Friday</option>
-              <option value="7" {% if current_weekday == '7' %}selected{% endif %}>Saturday</option>
+              <option value="1" {% if current_weekdays and '1' in current_weekdays %}selected{% endif %}>Sunday</option>
+              <option value="2" {% if current_weekdays and '2' in current_weekdays %}selected{% endif %}>Monday</option>
+              <option value="3" {% if current_weekdays and '3' in current_weekdays %}selected{% endif %}>Tuesday</option>
+              <option value="4" {% if current_weekdays and '4' in current_weekdays %}selected{% endif %}>Wednesday</option>
+              <option value="5" {% if current_weekdays and '5' in current_weekdays %}selected{% endif %}>Thursday</option>
+              <option value="6" {% if current_weekdays and '6' in current_weekdays %}selected{% endif %}>Friday</option>
+              <option value="7" {% if current_weekdays and '7' in current_weekdays %}selected{% endif %}>Saturday</option>
             </select>
           </div>
         </div>
@@ -255,6 +254,25 @@
   {% endif %}
 </div>
 
+<!-- Mobile FAB (Floating Action Button) -->
+<div class="fixed bottom-6 right-6 sm:hidden z-50">
+  <a href="{% url 'entry-create' %}" 
+     class="inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/95 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background shadow-lg hover:shadow-xl active:scale-95 transition-all duration-200 ease-out w-14 h-14">
+    <i data-lucide="plus" class="h-6 w-6 stroke-2"></i>
+    <span class="sr-only">New Entry</span>
+  </a>
+</div>
+
+<!-- Desktop Scroll to Top Button -->
+<div class="fixed bottom-6 right-6 hidden sm:block z-50">
+  <button onclick="scrollToTop()" 
+          id="scroll-to-top"
+          class="inline-flex items-center justify-center rounded-full bg-background border border-border text-muted-foreground hover:text-foreground hover:bg-accent hover:border-accent-foreground active:scale-95 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background shadow-md hover:shadow-lg transition-all duration-200 ease-out w-12 h-12 opacity-0 invisible"
+          style="transition: opacity 0.3s ease-out, visibility 0.3s ease-out, transform 0.2s ease-out;">
+    <i data-lucide="arrow-up" class="h-4 w-4 stroke-2"></i>
+    <span class="sr-only">Scroll to top</span>
+  </button>
+</div>
 
 <style>
   .line-clamp-3 {
@@ -272,6 +290,28 @@
     filterPanel.classList.toggle('hidden');
   }
 
+  // Scroll to top functionality
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+  
+  // Show/hide scroll to top button
+  function handleScrollToTopVisibility() {
+    const scrollToTopBtn = document.getElementById('scroll-to-top');
+    if (!scrollToTopBtn) return;
+    
+    if (window.scrollY > 300) {
+      scrollToTopBtn.style.opacity = '1';
+      scrollToTopBtn.style.visibility = 'visible';
+    } else {
+      scrollToTopBtn.style.opacity = '0';
+      scrollToTopBtn.style.visibility = 'hidden';
+    }
+  }
+  
   // Initialize filter state and interactions
   document.addEventListener('DOMContentLoaded', function() {
     const dateRangeSelect = document.getElementById('date_range');
@@ -292,6 +332,10 @@
         // this.form.submit();
       });
     }
+    
+    // Initialize scroll to top visibility
+    handleScrollToTopVisibility();
+    window.addEventListener('scroll', handleScrollToTopVisibility);
   });
 </script>
 {% endblock content %}
