@@ -1,3 +1,4 @@
+from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
@@ -16,7 +17,7 @@ from .models import Entry
 
 
 class LockedView(LoginRequiredMixin):
-    login_url = "admin:login"
+    login_url = "login"
 
 
 class EntryListView(LockedView, ListView):
@@ -116,3 +117,11 @@ class EntryDeleteView(LockedView, SuccessMessageMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super().delete(request, *args, **kwargs)
+
+
+class CustomLoginView(auth_views.LoginView):
+    template_name = 'entries/login.html'
+    redirect_authenticated_user = True
+    
+    def get_success_url(self):
+        return reverse_lazy('entry-list')

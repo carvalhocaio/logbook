@@ -110,7 +110,7 @@
               <i data-lucide="sun" class="h-4 w-4 dark:hidden"></i>
               <i data-lucide="moon" class="h-4 w-4 hidden dark:block"></i>
             </button>
-            <form method="post" action="{% url 'admin:logout' %}" class="inline">
+            <form method="post" action="{% url 'logout' %}" class="inline">
               {% csrf_token %}
               <button type="submit" 
                       class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
@@ -140,7 +140,7 @@
               <span class="dark:hidden">Light Mode</span>
               <span class="hidden dark:block">Dark Mode</span>
             </button>
-            <form method="post" action="{% url 'admin:logout' %}">
+            <form method="post" action="{% url 'logout' %}">
               {% csrf_token %}
               <button type="submit" 
                       class="w-full inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - LogBook</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            border: "hsl(var(--border))",
+            input: "hsl(var(--input))",
+            ring: "hsl(var(--ring))",
+            background: "hsl(var(--background))",
+            foreground: "hsl(var(--foreground))",
+            primary: {
+              DEFAULT: "hsl(var(--primary))",
+              foreground: "hsl(var(--primary-foreground))",
+            },
+            secondary: {
+              DEFAULT: "hsl(var(--secondary))",
+              foreground: "hsl(var(--secondary-foreground))",
+            },
+            destructive: {
+              DEFAULT: "hsl(var(--destructive))",
+              foreground: "hsl(var(--destructive-foreground))",
+            },
+            muted: {
+              DEFAULT: "hsl(var(--muted))",
+              foreground: "hsl(var(--muted-foreground))",
+            },
+            accent: {
+              DEFAULT: "hsl(var(--accent))",
+              foreground: "hsl(var(--accent-foreground))",
+            },
+            card: {
+              DEFAULT: "hsl(var(--card))",
+              foreground: "hsl(var(--card-foreground))",
+            },
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 222.2 84% 4.9%;
+      --card: 0 0% 100%;
+      --card-foreground: 222.2 84% 4.9%;
+      --primary: 221.2 83.2% 53.3%;
+      --primary-foreground: 210 40% 98%;
+      --secondary: 210 40% 96%;
+      --secondary-foreground: 222.2 84% 4.9%;
+      --muted: 210 40% 96%;
+      --muted-foreground: 215.4 16.3% 46.9%;
+      --accent: 210 40% 96%;
+      --accent-foreground: 222.2 84% 4.9%;
+      --destructive: 0 84.2% 60.2%;
+      --destructive-foreground: 210 40% 98%;
+      --border: 214.3 31.8% 91.4%;
+      --input: 214.3 31.8% 91.4%;
+      --ring: 221.2 83.2% 53.3%;
+    }
+    
+    .dark {
+      --background: 222.2 84% 4.9%;
+      --foreground: 210 40% 98%;
+      --card: 222.2 84% 4.9%;
+      --card-foreground: 210 40% 98%;
+      --primary: 217.2 91.2% 59.8%;
+      --primary-foreground: 222.2 84% 4.9%;
+      --secondary: 217.2 32.6% 17.5%;
+      --secondary-foreground: 210 40% 98%;
+      --muted: 217.2 32.6% 17.5%;
+      --muted-foreground: 215 20.2% 65.1%;
+      --accent: 217.2 32.6% 17.5%;
+      --accent-foreground: 210 40% 98%;
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 210 40% 98%;
+      --border: 217.2 32.6% 17.5%;
+      --input: 217.2 32.6% 17.5%;
+      --ring: 224.3 76.3% 94.1%;
+    }
+  </style>
+</head>
+<body class="h-full bg-background text-foreground">
+  <div class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+      <div class="flex justify-center">
+        <div class="flex items-center space-x-2">
+          <i data-lucide="book-open" class="h-8 w-8 text-primary"></i>
+          <span class="text-2xl font-bold text-foreground">LogBook</span>
+        </div>
+      </div>
+      <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-foreground">
+        Sign in to your account
+      </h2>
+      <p class="mt-2 text-center text-sm text-muted-foreground">
+        Welcome back! Please enter your credentials to continue.
+      </p>
+    </div>
+
+    <!-- Login Form -->
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <div class="bg-card py-8 px-4 shadow-lg sm:rounded-lg sm:px-10 border border-border">
+        <!-- Dark Mode Toggle -->
+        <div class="flex justify-end mb-6">
+          <button onclick="toggleDarkMode()" 
+                  class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 w-9">
+            <i data-lucide="sun" class="h-4 w-4 dark:hidden"></i>
+            <i data-lucide="moon" class="h-4 w-4 hidden dark:block"></i>
+          </button>
+        </div>
+
+        <form class="space-y-6" method="post">
+          {% csrf_token %}
+          
+          <!-- Username Field -->
+          <div>
+            <label for="id_username" class="block text-sm font-medium text-foreground mb-2">
+              Username
+            </label>
+            <div class="relative">
+              <i data-lucide="user" class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"></i>
+              <input
+                id="id_username"
+                name="username"
+                type="text"
+                required
+                class="flex h-10 w-full rounded-md border border-input bg-background pl-10 pr-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                placeholder="Enter your username"
+                value="{{ form.username.value|default:'' }}"
+              />
+            </div>
+            {% if form.username.errors %}
+              <p class="mt-2 text-sm text-destructive">{{ form.username.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+          <!-- Password Field -->
+          <div>
+            <label for="id_password" class="block text-sm font-medium text-foreground mb-2">
+              Password
+            </label>
+            <div class="relative">
+              <i data-lucide="lock" class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"></i>
+              <input
+                id="id_password"
+                name="password"
+                type="password"
+                required
+                class="flex h-10 w-full rounded-md border border-input bg-background pl-10 pr-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                placeholder="Enter your password"
+              />
+            </div>
+            {% if form.password.errors %}
+              <p class="mt-2 text-sm text-destructive">{{ form.password.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+          <!-- Non-field errors -->
+          {% if form.non_field_errors %}
+            <div class="rounded-md border border-destructive bg-destructive/10 p-3">
+              <div class="flex items-center">
+                <i data-lucide="alert-circle" class="h-4 w-4 text-destructive mr-2"></i>
+                <p class="text-sm text-destructive">{{ form.non_field_errors.0 }}</p>
+              </div>
+            </div>
+          {% endif %}
+
+          <!-- Submit Button -->
+          <div>
+            <button
+              type="submit"
+              class="flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-colors h-10"
+            >
+              <i data-lucide="log-in" class="mr-2 h-4 w-4"></i>
+              Sign in
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+    
+    // Dark mode functionality
+    function initDarkMode() {
+      // Check if user has a saved preference
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+    
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.contains('dark');
+      
+      if (isDark) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+      
+      // Re-initialize lucide icons after theme change
+      setTimeout(() => lucide.createIcons(), 100);
+    }
+    
+    // Initialize dark mode on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      initDarkMode();
+    });
+    
+    // Initialize immediately for faster loading
+    initDarkMode();
+  </script>
+</body>
+</html>

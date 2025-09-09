@@ -1,4 +1,5 @@
 from django.urls import path
+from django.contrib.auth import views as auth_views
 
 from . import views
 
@@ -27,5 +28,17 @@ urlpatterns = [
         "entry/<int:pk>/delete",
         views.EntryDeleteView.as_view(),
         name="entry-delete",
+    ),
+    
+    # Authentication URLs
+    path(
+        "login/",
+        views.CustomLoginView.as_view(),
+        name="login"
+    ),
+    path(
+        "logout/",
+        auth_views.LogoutView.as_view(),
+        name="logout"
     ),
 ]
