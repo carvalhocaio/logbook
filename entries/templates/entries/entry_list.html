@@ -223,6 +223,98 @@
         </div>
       {% endfor %}
     </div>
+    
+    <!-- Pagination -->
+    {% if is_paginated %}
+      <!-- Desktop Pagination -->
+      <div class="mt-8 hidden sm:flex items-center justify-between">
+        <div class="text-sm text-muted-foreground">
+          Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }} entries
+        </div>
+        
+        <nav class="flex items-center space-x-2" aria-label="Pagination">
+          <!-- Previous Page -->
+          {% if page_obj.has_previous %}
+            <a href="?{% if request.GET.urlencode %}{{ request.GET.urlencode }}&{% endif %}page=1"
+               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3">
+              <i data-lucide="chevrons-left" class="h-4 w-4"></i>
+            </a>
+            <a href="?{% if request.GET.urlencode %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}"
+               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3">
+              <i data-lucide="chevron-left" class="h-4 w-4"></i>
+            </a>
+          {% else %}
+            <span class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-muted text-muted-foreground h-9 px-3 cursor-not-allowed">
+              <i data-lucide="chevrons-left" class="h-4 w-4"></i>
+            </span>
+            <span class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-muted text-muted-foreground h-9 px-3 cursor-not-allowed">
+              <i data-lucide="chevron-left" class="h-4 w-4"></i>
+            </span>
+          {% endif %}
+          
+          <!-- Page Numbers -->
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <span class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground h-9 px-3">
+                {{ num }}
+              </span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <a href="?{% if request.GET.urlencode %}{{ request.GET.urlencode }}&{% endif %}page={{ num }}"
+                 class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3">
+                {{ num }}
+              </a>
+            {% endif %}
+          {% endfor %}
+          
+          <!-- Next Page -->
+          {% if page_obj.has_next %}
+            <a href="?{% if request.GET.urlencode %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.next_page_number }}"
+               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3">
+              <i data-lucide="chevron-right" class="h-4 w-4"></i>
+            </a>
+            <a href="?{% if request.GET.urlencode %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.paginator.num_pages }}"
+               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3">
+              <i data-lucide="chevrons-right" class="h-4 w-4"></i>
+            </a>
+          {% else %}
+            <span class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-muted text-muted-foreground h-9 px-3 cursor-not-allowed">
+              <i data-lucide="chevron-right" class="h-4 w-4"></i>
+            </span>
+            <span class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-muted text-muted-foreground h-9 px-3 cursor-not-allowed">
+              <i data-lucide="chevrons-right" class="h-4 w-4"></i>
+            </span>
+          {% endif %}
+        </nav>
+      </div>
+      
+      <!-- Mobile Pagination -->
+      <div class="mt-6 sm:hidden">
+        <div class="text-center text-sm text-muted-foreground mb-4">
+          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} ({{ page_obj.paginator.count }} entries)
+        </div>
+        <div class="flex items-center justify-between space-x-4">
+          {% if page_obj.has_previous %}
+            <a href="?{% if request.GET.urlencode %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}"
+               class="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+              <i data-lucide="chevron-left" class="h-4 w-4 mr-2"></i>
+              Previous
+            </a>
+          {% else %}
+            <div class="flex-1"></div>
+          {% endif %}
+          
+          {% if page_obj.has_next %}
+            <a href="?{% if request.GET.urlencode %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.next_page_number }}"
+               class="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+              Next
+              <i data-lucide="chevron-right" class="h-4 w-4 ml-2"></i>
+            </a>
+          {% else %}
+            <div class="flex-1"></div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
   {% else %}
     <!-- Empty State -->
     <div class="text-center py-12">
