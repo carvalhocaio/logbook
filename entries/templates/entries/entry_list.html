@@ -19,24 +19,61 @@
     </div>
   </div>
 
-  <!-- Filters Section -->
-  <div class="mb-8 rounded-lg border border-border bg-card p-4 sm:p-6">
-    <div class="mb-4">
-      <button onclick="toggleFilters()" class="flex items-center justify-between w-full">
-        <h2 class="text-lg font-semibold text-foreground flex items-center">
-          <i data-lucide="filter" class="h-5 w-5 mr-2"></i>
-          Filters
+  <!-- Sticky Action Bar -->
+  <div class="sticky top-4 z-40 mb-8">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <!-- Filter Toggle Button -->
+        <button onclick="toggleFilters()" 
+                class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+          <i data-lucide="filter" class="mr-2 h-4 w-4"></i>
+          <span class="hidden sm:inline">Filters</span>
           {% if has_filters %}
-            <span class="ml-2 inline-flex items-center rounded-full bg-primary px-2.5 py-0.5 text-xs font-medium text-primary-foreground">
-              Active
+            <span class="ml-2 inline-flex items-center rounded-full bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground">
+              {{ filtered_count }}
             </span>
           {% endif %}
-        </h2>
-        <i data-lucide="chevron-down" class="h-4 w-4 text-muted-foreground transition-transform" id="filter-chevron"></i>
-      </button>
+        </button>
+        
+        <!-- Active Filters Summary -->
+        {% if has_filters %}
+          <div class="hidden sm:flex items-center gap-2 text-sm text-muted-foreground">
+            {% if current_search %}
+              <span class="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground">
+                "{{ current_search|truncatechars:15 }}"
+              </span>
+            {% endif %}
+            {% if current_date %}
+              <span class="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground">
+                {{ current_date }}
+              </span>
+            {% endif %}
+            {% if current_date_range %}
+              <span class="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground">
+                {{ current_date_range|capfirst }}
+              </span>
+            {% endif %}
+            {% if current_weekdays %}
+              <span class="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground">
+                {{ current_weekdays|length }} day{{ current_weekdays|length|pluralize }}
+              </span>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+      
+      <!-- New Entry Button -->
+      <a href="{% url 'entry-create' %}" 
+         class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-xl h-10 px-4 py-2">
+        <i data-lucide="plus" class="mr-2 h-4 w-4"></i>
+        <span class="hidden sm:inline">New Entry</span>
+        <span class="sm:hidden">New</span>
+      </a>
     </div>
-    
-    <div id="filter-form" class="{% if not has_filters and not request.GET.show_filters %}hidden{% endif %}">
+  </div>
+
+  <!-- Filters Panel (hidden by default) -->
+  <div id="filter-panel" class="{% if not has_filters and not request.GET.show_filters %}hidden{% endif %} mb-8 rounded-lg border border-border bg-card p-4 sm:p-6 transition-all duration-200">
       <form method="get" class="space-y-4">
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <!-- Search Filter -->
@@ -123,7 +160,6 @@
           {% endif %}
         </div>
       </form>
-    </div>
   </div>
 
   <!-- Results Summary -->
@@ -219,6 +255,7 @@
   {% endif %}
 </div>
 
+
 <style>
   .line-clamp-3 {
     display: -webkit-box;
@@ -231,29 +268,14 @@
 
 <script>
   function toggleFilters() {
-    const filterForm = document.getElementById('filter-form');
-    const chevron = document.getElementById('filter-chevron');
-    
-    filterForm.classList.toggle('hidden');
-    
-    if (filterForm.classList.contains('hidden')) {
-      chevron.style.transform = 'rotate(0deg)';
-    } else {
-      chevron.style.transform = 'rotate(180deg)';
-    }
+    const filterPanel = document.getElementById('filter-panel');
+    filterPanel.classList.toggle('hidden');
   }
 
   // Initialize filter state and interactions
   document.addEventListener('DOMContentLoaded', function() {
-    const filterForm = document.getElementById('filter-form');
-    const chevron = document.getElementById('filter-chevron');
     const dateRangeSelect = document.getElementById('date_range');
     const weekdaySelect = document.getElementById('weekday');
-    
-    // Set initial chevron state
-    if (!filterForm.classList.contains('hidden')) {
-      chevron.style.transform = 'rotate(180deg)';
-    }
     
     if (dateRangeSelect) {
       dateRangeSelect.addEventListener('change', function() {

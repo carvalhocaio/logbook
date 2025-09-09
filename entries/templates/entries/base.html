@@ -110,12 +110,6 @@
               <i data-lucide="sun" class="h-4 w-4 dark:hidden"></i>
               <i data-lucide="moon" class="h-4 w-4 hidden dark:block"></i>
             </button>
-            <a href="{% url 'entry-create' %}" 
-               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-              <i data-lucide="plus" class="mr-2 h-4 w-4"></i>
-              <span class="hidden md:inline">New Entry</span>
-              <span class="md:hidden">New</span>
-            </a>
             <form method="post" action="{% url 'admin:logout' %}" class="inline">
               {% csrf_token %}
               <button type="submit" 
@@ -146,11 +140,6 @@
               <span class="dark:hidden">Light Mode</span>
               <span class="hidden dark:block">Dark Mode</span>
             </button>
-            <a href="{% url 'entry-create' %}" 
-               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-              <i data-lucide="plus" class="mr-2 h-4 w-4"></i>
-              New Entry
-            </a>
             <form method="post" action="{% url 'admin:logout' %}">
               {% csrf_token %}
               <button type="submit" 
